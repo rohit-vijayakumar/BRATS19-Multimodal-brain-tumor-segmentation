@@ -1,0 +1,8 @@
+python==3.5.6
+opencv-python==3.4.1
+tensorflow>=1.10.0
+keras>=2.2.2
+matplotlib==3.0.0
+numpy==1.15.2
+pillow==7.0.0
+scikit-image==0.14.0
