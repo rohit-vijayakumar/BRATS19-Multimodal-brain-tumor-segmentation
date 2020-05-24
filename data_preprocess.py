@@ -37,6 +37,7 @@ def n4itk(img):         #must input with sitk img object
     corrected_img = sitk.N4BiasFieldCorrection(img, img_mask)
     return corrected_img    
 
+
 # data transforms for flair and t2
 def create_data_ft(src, maskfl, maskt2, label=False, mod=1, resize=(155,img_size,img_size)):
     if mod==1:
