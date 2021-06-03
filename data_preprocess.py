@@ -24,16 +24,16 @@ smooth = 0.005
 num_of_aug = 2
 num_epoch = 30
 pul_seq = 'Flair'
-sharp = False       # sharpen filter
+sharp = False
 LR = 1e-4
 
-num_of_patch = 4 # must be a square number
+num_of_patch = 4 
 label_num = 5   # 1 = necrosis+NET, 2 = tumor core, 3 = original, 4 = ET, 5 = complete tumor
 
 
 def n4itk(img):         #must input with sitk img object
     img = sitk.Cast(img, sitk.sitkFloat32)
-    img_mask = sitk.BinaryNot(sitk.BinaryThreshold(img, 0, 0))   ## Create a mask spanning the part containing the brain, as we want to apply the filter to the brain image
+    img_mask = sitk.BinaryNot(sitk.BinaryThreshold(img, 0, 0))  
     corrected_img = sitk.N4BiasFieldCorrection(img, img_mask)
     return corrected_img    
 
@@ -48,12 +48,12 @@ def create_data_ft(src, maskfl, maskt2, label=False, mod=1, resize=(155,img_size
         print('Processing---Flair')
         for file in files:    # get flair
             img = io.imread(file, plugin='simpleitk')
-            img = (img-img.mean()) / img.std()      # normalization => zero mean 
+            img = (img-img.mean()) / img.std()     
             img = img.astype('float32')
             for slice in range(0,155):     # choose the slice range
                 img_t = img[slice,:,:]
                 img_t =img_t.reshape((1,)+img_t.shape)
-                img_t =img_t.reshape((1,)+img_t.shape)   # become rank 4
+                img_t =img_t.reshape((1,)+img_t.shape)
                 for n in range(img_t.shape[0]):
                     imgs.append(img_t[n,:,:,:])
         return np.array(imgs)
@@ -67,12 +67,12 @@ def create_data_ft(src, maskfl, maskt2, label=False, mod=1, resize=(155,img_size
         print('Processing---T2')
         for file in files:    #  get t2
             img = io.imread(file, plugin='simpleitk')
-            img = (img-img.mean()) / img.std()      #normalization => zero mean 
+            img = (img-img.mean()) / img.std()
             img = img.astype('float32')
             for slice in range(0,155):     # choose the slice range
                 img_t = img[slice,:,:]
                 img_t =img_t.reshape((1,)+img_t.shape)
-                img_t =img_t.reshape((1,)+img_t.shape)   # become rank 4
+                img_t =img_t.reshape((1,)+img_t.shape)
                 for n in range(img_t.shape[0]):
                     imgs.append(img_t[n,:,:,:])
         return np.array(imgs)
@@ -99,12 +99,12 @@ def create_data_t1(src, mask, label=False, resize=(155,img_size,img_size)):
                 img[img != 4] = 0       # only left ET
                 img[img == 4] = 1
             if label_num == 3:
-                img[img == 3] = 1       # remain GT, design for 2015 data  
+                img[img == 3] = 1
             img = img.astype('float32')
         for slice in range(0,155):     # choose the slice range
             img_t = img[slice,:,:]
             img_t =img_t.reshape((1,)+img_t.shape)
-            img_t =img_t.reshape((1,)+img_t.shape)   #become rank 4
+            img_t =img_t.reshape((1,)+img_t.shape)
             for n in range(img_t.shape[0]):
                 imgs.append(img_t[n,:,:,:])
         return np.array(imgs)
@@ -130,12 +130,12 @@ def create_data_t1c(src, mask, label=False, resize=(155,img_size,img_size)):
                 img[img != 4] = 0       # only left ET
                 img[img == 4] = 1
             if label_num == 3:
-                img[img == 3] = 1       # remain GT, design for 2015 data  
+                img[img == 3] = 1  
             img = img.astype('float32')
         for slice in range(0,155):     #choose the slice range
             img_t = img[slice,:,:]
             img_t =img_t.reshape((1,)+img_t.shape)
-            img_t =img_t.reshape((1,)+img_t.shape)   # become rank 4
+            img_t =img_t.reshape((1,)+img_t.shape)
             for n in range(img_t.shape[0]):
                 imgs.append(img_t[n,:,:,:])
         return np.array(imgs)
@@ -152,7 +152,7 @@ def create_data_mask_full(src, mask, label=False, resize=(155,img_size,img_size)
         img = io.imread(file, plugin='simpleitk')
         if label:
             if label_num == 5:
-                img[img != 0] = 1       #nRegion 1 => 1+2+3+4 complete tumor
+                img[img != 0] = 1       #Region 1 => 1+2+3+4 complete tumor
             if label_num == 1:
                 img[img != 1] = 0       # only left necrosis and NET
             if label_num == 2:
@@ -162,12 +162,12 @@ def create_data_mask_full(src, mask, label=False, resize=(155,img_size,img_size)
                 img[img != 4] = 0       # only left ET
                 img[img == 4] = 1
             if label_num == 3:
-                img[img == 3] = 1       # remain GT, design for 2015 data  
+                img[img == 3] = 1 
             img = img.astype('float32')
         for slice in range(0,155):     # choose the slice range
             img_t = img[slice,:,:]
             img_t =img_t.reshape((1,)+img_t.shape)
-            img_t =img_t.reshape((1,)+img_t.shape)   # become rank 4
+            img_t =img_t.reshape((1,)+img_t.shape)
             for n in range(img_t.shape[0]):
                 imgs.append(img_t[n,:,:,:])
         return np.array(imgs)
@@ -193,12 +193,12 @@ def create_data_mask_core(src, mask, label=False, resize=(155,img_size,img_size)
                 img[img != 4] = 0       # only left ET
                 img[img == 4] = 1
             if label_num == 3:
-                img[img == 3] = 1       # remain GT, design for 2015 data  
+                img[img == 3] = 1   
             img = img.astype('float32')
         for slice in range(0,155):     # choose the slice range
             img_t = img[slice,:,:]
             img_t =img_t.reshape((1,)+img_t.shape)
-            img_t =img_t.reshape((1,)+img_t.shape)   # become rank 4
+            img_t =img_t.reshape((1,)+img_t.shape)
             for n in range(img_t.shape[0]):
                 imgs.append(img_t[n,:,:,:])
         return np.array(imgs)
@@ -224,12 +224,12 @@ def create_data_mask_et(src, mask, label=False, resize=(155,img_size,img_size)):
                 img[img != 4] = 0       # only left ET
                 img[img == 4] = 1
             if label_num == 3:
-                img[img == 3] = 1       # remain GT, design for 2015 data  
+                img[img == 3] = 1 
             img = img.astype('float32')
         for slice in range(0,155):     # choose the slice range
             img_t = img[slice,:,:]
             img_t =img_t.reshape((1,)+img_t.shape)
-            img_t =img_t.reshape((1,)+img_t.shape)   # become rank 4
+            img_t =img_t.reshape((1,)+img_t.shape)
             for n in range(img_t.shape[0]):
                 imgs.append(img_t[n,:,:,:])
         return np.array(imgs)
@@ -255,12 +255,12 @@ def create_data_mask_all(src, mask, label=False, resize=(155,img_size,img_size))
                 img[img != 4] = 0       # only left ET
                 img[img == 4] = 1
             if label_num == 3:
-                img[img == 3] = 1       # remain GT, design for 2015 data  
+                img[img == 3] = 1  
             img = img.astype('float32')
         for slice in range(0,155):     # choose the slice range
             img_t = img[slice,:,:]
             img_t =img_t.reshape((1,)+img_t.shape)
-            img_t =img_t.reshape((1,)+img_t.shape)   # become rank 4
+            img_t =img_t.reshape((1,)+img_t.shape)
             for n in range(img_t.shape[0]):
                 imgs.append(img_t[n,:,:,:])
         return np.array(imgs)
