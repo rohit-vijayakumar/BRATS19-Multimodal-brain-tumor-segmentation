@@ -1,5 +1,5 @@
 python==3.5.6
-opencv-python==3.4.1
+opencv-python==4.2.0.32
 tensorflow>=1.10.0
 keras>=2.2.2
 matplotlib==3.0.0
